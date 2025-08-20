@@ -214,16 +214,32 @@
 
         <div style="margin-top:18px;">
           <div class="price" aria-hidden="true">$ 23,97</div>
-          <!-- HOTMART - Sales Funnel Widget -->
-<!--- sales funnel container --->
-<div id="hotmart-sales-funnel"></div>
+          
+         <script src="https://cdn.lastlink.com/upsell.min.js"></script>
+    <script>
+    var upsellRedirect = "https://vcbemcomseucorpo.site/home-acesso-liberado-wwssbr/";
 
-<!--- script load and setup --->
-<script src="https://checkout.hotmart.com/lib/hotmart-checkout-elements.js"></script>
-<script>
-checkoutElements.init('salesFunnel').mount('#hotmart-sales-funnel')
-</script>
-<!-- HOTMART - Sales Funnel Widget -->
+    function setupDenyButtons() {
+        document.querySelectorAll('[id^="denyButton"]').forEach(button => {
+            button.onclick = function() {
+                const currentUrl = new URL(window.location.href);
+                const newUrl = new URL("https://vcbemcomseucorpo.site/home-acesso-liberado-wwssbr/");
+
+                currentUrl.searchParams.forEach((value, key) => {
+                    newUrl.searchParams.append(key, value);
+                });
+
+                window.location.href = newUrl.toString();
+            };
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupDenyButtons);
+    } else {
+        setupDenyButtons();
+    }
+    </script><div style="font-family: DM Sans; display: flex; flex-direction: column; gap: 24px; align-items: center; cursor: pointer;" bis_skin_checked="1"><div class="button-default button-accept w-full" style="padding: 17px 32px; line-height: 22px; border-radius: 12px; font-weight: 700 !important; background-color: rgb(52, 226, 60); color: rgb(0, 0, 0);" id="llupsell-C49BE16E6-1" bis_skin_checked="1"> SIM! DESCOBRIR CHAMADAS + STORY OCULTOS </div><div class="button-default button-deny w-full" style="text-decoration: underline; line-height: 22px; font-size: 16px; font-weight: 700 !important; color: rgb(117, 117, 117);" id="denyButton055ffef" bis_skin_checked="1"> não quero saber, obrigado. </div></div>
 
           <p class="note">Si intentaste comprar y por algún motivo falló, por favor inténtalo de nuevo al menos 3 veces más para que nuestro sistema cambie automáticamente de proveedor y funcione correctamente. ¡Gracias!</p>
         </div>
