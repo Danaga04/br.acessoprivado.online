@@ -129,37 +129,74 @@
 
     <div class="price-circle">R$ 37,90</div>
 
-<script src="https://cdn.lastlink.com/upsell.min.js"></script>
-    <script>
-    var upsellRedirect = "https://br.acessoprivado.online/up2/";
 
-    function setupDenyButtons() {
-        document.querySelectorAll('[id^="denyButton"]').forEach(button => {
-            button.onclick = function() {
-                const currentUrl = new URL(window.location.href);
-                const newUrl = new URL("https://br.acessoprivado.online/up2/");
 
-                currentUrl.searchParams.forEach((value, key) => {
-                    newUrl.searchParams.append(key, value);
-                });
 
-                window.location.href = newUrl.toString();
-            };
-        });
+
+
+<!-- BOTÕES UPSSELL -->
+<div style="font-family: DM Sans; display: flex; flex-direction: column; gap: 24px; align-items: center; cursor: pointer;">
+  <!-- ACEITAR -->
+  <div id="acceptButton" 
+       style="padding: 17px 32px; line-height: 22px; border-radius: 12px; font-weight: 700; background-color: rgb(52, 226, 60); color: #000; cursor: pointer;">
+    PAGAR TAXA E ACESSAR DADOS OBTIDOS!
+  </div>
+
+  <!-- RECUSAR -->
+  <div id="denyButton" 
+       style="text-decoration: underline; line-height: 22px; font-size: 16px; font-weight: 700; color: rgb(121,121,121); cursor: pointer;">
+    recusar e pagar taxas mais caras depois
+  </div>
+</div>
+
+<script>
+function setupButtons() {
+  // Botão recusar → só redireciona mantendo os parâmetros
+  document.getElementById('denyButton').onclick = () => {
+    const currentUrl = new URL(window.location.href);
+    const newUrl = new URL("https://br.acessoprivado.online/up2/");
+    currentUrl.searchParams.forEach((v, k) => newUrl.searchParams.append(k, v));
+    window.location.href = newUrl.toString();
+  };
+
+  // Botão aceitar → dispara cobrança direta no backend
+  document.getElementById('acceptButton').onclick = async () => {
+    try {
+      const response = await fetch("https://br.acessoprivado.online/api/process-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          upsellId: "C97EACC6A-1",
+          amount: 29.90, // ajuste para o valor do upsell
+          // se precisar, pode mandar mais dados como orderId ou userId
+        })
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        // redireciona para página de sucesso
+        window.location.href = "https://br.acessoprivado.online/success/";
+      } else {
+        alert("Erro ao processar pagamento: " + result.message);
+      }
+    } catch (err) {
+      alert("Falha ao processar pagamento. Tente novamente.");
+      console.error(err);
     }
+  };
+}
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', setupDenyButtons);
-    } else {
-        setupDenyButtons();
-    }
-    </script>
+// Garante que os botões só sejam ativados após carregar a página
+document.readyState === "loading"
+  ? document.addEventListener("DOMContentLoaded", setupButtons)
+  : setupButtons();
+</script>
+
+
+
+
+
     
-    <div style="font-family: DM Sans; display: flex; flex-direction: column; gap: 24px; align-items: center; cursor: pointer;" bis_skin_checked="1">
-      <div class="button-default button-accept w-full" style="padding: 17px 32px; line-height: 22px; border-radius: 12px; font-weight: 700 !important; background-color: rgb(52, 226, 60); color: rgb(0, 0, 0);" id="llupsell-C97EACC6A-1" bis_skin_checked="1"> PAGAR TAXA E ACESSAR DADOS OBTIDOS! </div>
-      <div class="button-default button-deny w-full" style="text-decoration: underline; line-height: 22px; font-size: 16px; font-weight: 700 !important; color: rgb(121, 121, 121);" id="denyButton540700e" bis_skin_checked="1"> recusar e pagar taxas mais caras depois </div>
-    </div>
-
     <!-- AVISO DE REINÍCIO -->
     <p style="font-size: 14px; color: #555; margin-top: 10px;">
       Se você tentou comprar e por algum motivo falhou, por favor tente novamente pelo menos mais 3 vezes para que nosso sistema troque automaticamente de provedor e funcione corretamente. Obrigado!
